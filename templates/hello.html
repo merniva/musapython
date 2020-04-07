@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Verkkosivuni</title>
+    </head>
+    <body>
+        <h1>Päivää {{ name }}</h1>
+        <p>
+            Mitä kuuluu {{ name }}
+        </p>
+        <p>
+            Paljonko sinulla on rahaa {{ name }}
+        </p>
+            <form action="{{ url_for('money') }}" method="post">
+                <input type="text" name="amount" placeholder="Kirjoita summa (€)">
+                <button>Lähetä</button>
+            </form><br>
+        <a href="{{ url_for('index') }}">Takaisin</a>
+    </body>
+</html>

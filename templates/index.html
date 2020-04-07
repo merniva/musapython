@@ -1,0 +1,13 @@
+{% extends "layout.html" %}
+
+{% block heading %}
+    Ensimmäinen sivuni
+{% endblock %}
+
+{% block body %}
+    <form action="{{ url_for('hello') }}" method="post">
+        <input type="text" name="name" placeholder="Kirjoita nimesi">
+        <button>Lähetä</button>
+    </form><br>
+    <a href="{{ url_for ('more') }}">Lue lisää!</a>
+{% endblock %}
