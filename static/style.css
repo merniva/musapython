@@ -1,0 +1,469 @@
+* {
+    box-sizing: border-box;
+    margin:0;
+    padding:0;
+}
+
+body {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 16px;
+    background-color: #0F4C81;
+  }
+  
+a {
+  color: #000;
+}
+
+li {
+  list-style-type: none;
+}
+
+.kehys{
+    height: 100%;
+    width:100%;
+}
+
+nav {
+    color: #000;
+    background-color: #0F4C81;
+    padding: 0.5rem 1rem;
+    display: flex;
+    justify-content: stretch;
+    opacity:0.9;
+}
+nav ul {
+    list-style-type: none;
+    font-family: 'Maven Pro', sans-serif;
+}
+nav ul a {
+    color: #000;
+    text-decoration: none;
+    font-weight: bolder;
+}
+nav ul a:hover {
+    border-bottom: 4px #7b255a solid;
+}
+
+nav ul a:active {
+  border-bottom: 4px #7b255a solid;
+}
+
+.menu li {
+    font-size: 16px;
+    padding: 15px 5px;
+    white-space: nowrap;
+}
+
+.toggle a {
+    font-size: 20px;
+}
+
+h2 {
+  font-family: 'Maven Pro', sans-serif;
+  font-weight:bold;
+  font-size: 2.7rem;
+  text-align: center;
+  padding-top:2.5rem;
+}
+
+h3, h4 {
+  font-family: 'Maven Pro', sans-serif;
+  font-weight:bold;
+  text-align: center;
+}
+
+.footer {
+    color: #000;
+    padding: 1rem;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+  }
+  
+  .footer p {
+    background-color:#dbabd5;
+    padding: 0.5rem 2rem;
+    opacity: 0.9;
+  }
+
+  .container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    flex-direction: column;
+    flex-grow: 1;
+  }
+
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding:1.6rem;
+  }
+
+  #aboutheader {
+    padding-top: 0;
+  }
+
+  .haku {
+      text-align: center;
+      padding:1rem;
+  }
+
+  .hakukentta {
+    height: 38px;
+    font-size:1rem;
+    border-radius: 20px;
+    padding-left:5px;
+    border-style: none;
+    margin-bottom:1rem;
+}
+
+  .kayttajalomake{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    flex-grow: 1;
+  }
+
+  #virheviesti {
+    display:none;
+    background-color: #FFF;
+    padding: 5px;
+    border: 1px solid;
+}
+
+  .button {
+    background-color: #000;
+    color:#FFF;
+    padding: 10px 50px;
+    text-align: center;
+    text-decoration: none;
+    font-weight:bold;
+    font-size:1rem;
+    display: inline-block;
+    border-radius: 20px;
+    border-style: none;
+    transition-duration: 0.2s;
+    font-family: 'Maven Pro', sans-serif;
+  }
+  .button:hover {
+      background-color: #7b255a;
+    }
+
+  .button:disabled {
+    background-color: rgb(41, 41, 41);
+    }
+
+  .kayttajabutton {
+    background-color: #000;
+    color:#FFF;
+    padding: 10px 60px;
+    text-align: center;
+    text-decoration: none;
+    font-weight:bold;
+    font-size:1rem;
+    display: inline-block;
+    border-radius: 20px;
+    border-style: none;
+    transition-duration: 0.2s;
+    font-family: 'Maven Pro', sans-serif;
+}
+
+  .kayttajabutton:hover {
+    background-color: #dbabd5;
+  }
+
+  .sivunvaihto {
+    display: none;
+    justify-content: center;
+  }
+
+  .sivubutton {
+    background-color: #000;
+    color:#FFF;
+    padding: 5px 10px;
+    margin:0.5rem;
+    text-decoration: none;
+    font-weight:bold;
+    font-size:1rem;
+    border-radius: 10px;
+    border-style: none;
+    transition-duration: 0.2s;
+    font-family: 'Maven Pro', sans-serif;
+    text-align: center;
+  }
+
+  .sivubutton:hover {
+      background-color: #7b255a;
+    }
+  .kayttajainfo {
+    font-size: smaller;
+  }
+
+  #ylos {
+      background-color: #000;
+      color:#FFF;
+      padding: 5px 10px;
+      margin:0.5rem;
+      text-decoration: none;
+      font-weight:bold;
+      font-size:1rem;
+      border-radius: 10px;
+      border-style: none;
+      transition-duration: 0.2s;
+      display: none;
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 50px;
+      height: 50px;
+      text-align: center;
+      z-index: 99;
+    }
+
+    #ylos:hover {
+      background-color: #7b255a;
+    }
+
+  #vinkkiboksi {
+    font-size: smaller;
+  }
+
+  #aboutboksi {
+      background-color: #FFF;
+      margin: 2% auto;
+      padding: 20px;
+      border: 1px solid #000;
+      width: 70%;
+      text-align: center;
+    }
+
+  #tulokset {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  
+  #lataus {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  #sivunro {
+    font-weight: bolder;
+  }
+  .tuloslaatikko {
+    background-color: rgba(255, 255, 255, 0.7);
+    margin:0.5rem;
+    width: 200px;
+    height: 300px;
+    flex-wrap: wrap;
+    display:flex;
+    justify-content: center;
+    text-align: center;
+    padding:0.5rem;
+    padding-top:1rem;
+    border: 1px solid #000;
+    overflow: hidden;
+  }
+
+  .tuloslaatikko a {
+    font-family: 'Maven Pro', sans-serif;
+    color: #000;
+    text-decoration: none;
+    font-weight: bolder;
+}
+
+.tuloslaatikko h3 {
+  max-height: 45px;
+  overflow: hidden;
+}
+
+.hakutulos {
+  min-height: 25px;
+  max-height: 43px;
+  overflow: hidden;
+}
+
+#samankaltaiset {
+  text-align: center;
+  list-style-type: none;
+  display: inline-block;
+  align-items: center;
+  justify-content: center;
+}
+
+#samankaltaiset a {
+    color: #000;
+    font-weight: bolder;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+#samankaltaiset a:hover {
+  border-bottom: 4px #7b255a solid;
+  text-decoration: none;
+}
+
+.modal {
+  display: none; 
+  position: fixed; 
+  z-index: 1; 
+  left: 0;
+  top: 0;
+  width: 100%; 
+  height: 100%;
+  overflow-y: scroll;
+  background-color: rgb(0,0,0);
+  background-color: rgba(0,0,0,0.4);
+}
+
+.modalSisalto {
+  background-color: #FFF;
+  margin: 5% auto;
+  padding: 20px;
+  border: 1px solid #000;
+  width: 70%;
+  text-align: center;
+}
+
+.modalSisalto a {
+  font-weight: bolder;
+}
+
+.modalSisalto ul {
+  list-style-type: none;
+  font-size: smaller;
+  font-weight: lighter;
+}
+.modalSisalto ul a {
+  color: #000;
+  text-decoration: none;
+}
+.modalSisalto ul a:hover, a:active {
+  border-bottom: 4px #7b255a solid;
+}
+
+#genreTagit a {
+  color: #000;
+  font-weight: bolder;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+#genreTagit a:hover {
+  border-bottom: 4px #7b255a solid;
+  text-decoration: none;
+}
+
+#kayttajaGenreTagit, #artistiGenreTagit, #lisaInfo {
+  font-size: smaller;
+  font-weight: lighter;
+  font-family: 'Open Sans', sans-serif;
+  text-decoration: none;
+}
+
+#kayttajaGenreTagit a, #artistiGenreTagit a {
+  text-decoration: none;
+}
+
+#kayttajaGenreTagit a:hover, #artistiGenreTagit a:hover{
+  border-bottom: 4px #7b255a solid;
+  }
+
+.close {
+  color: #000;
+  font-size: 28px;
+  font-weight: bold;
+  text-align: right;
+}
+
+.close:hover,
+.close:focus {
+  color: #7b255a;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+#katsoLisaa {
+    background-color: #000;
+    color:#FFF;
+    height: 37px;
+    padding: 2px 5px;
+    margin-top:2px;
+    text-align: center;
+    text-decoration: none;
+    font-size:1rem;
+    display: inline-block;
+    border-radius: 20px;
+    border-style: none;
+    transition-duration: 0.2s;
+    font-family: 'Maven Pro', sans-serif;
+}
+
+#katsoLisaa:hover {
+  background-color: #7b255a;
+}
+
+.kayttajakentta {
+  height: 25px;
+  font-size:1rem;
+  border-radius: 20px;
+  padding-left:5px;
+  border-style: none;
+  margin-bottom:0.5rem;
+}
+
+  @media all and (max-width: 600px) {   
+
+    .menu {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .toggle {
+        order: 1;
+    }
+    .item.button {
+        order: 3;
+    }
+    .item {
+        width: 100%;
+        text-align: center;
+        order: 2;
+        display: none;
+        background-color: #7b255a;
+    }
+    .item.active {
+        display: block;
+    }
+  }
+@media all and (min-width: 601px) {
+    .item {
+        display: inline-block;
+        width: auto;
+    }
+    .toggle {
+        display: none;
+    }
+    .item {
+        order: 1;
+    }
+    .button {
+        order: 2;
+    }
+   
+    .menu li {
+        padding: 15px 10px;
+    }
+
+    .container {
+        min-height: 15rem;
+      }
+    
+}

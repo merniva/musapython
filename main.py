@@ -1,8 +1,7 @@
-import os
-
 from flask import Flask, render_template, request, flash, session, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from models import *
+from config import *
 from forms import LoginForm, RegistrationForm
 from flask_login import LoginManager, current_user, login_user, logout_user, login_required
 
@@ -11,12 +10,7 @@ from flask_login import LoginManager, current_user, login_user, logout_user, log
 
 #engine = create_engine('mysql+pymysql://Admin:admin1@localhost/musahaku')
 #db = scoped_session(sessionmaker(bind=engine))
-SECRET_KEY = os.urandom(32)
-app = Flask(__name__)
 
-app.config["SQLALCHEMY_DATABASE_URI"] = 'mysql+pymysql://Admin:admin1@localhost/musahaku'
-app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-app.config['SECRET_KEY'] = SECRET_KEY
 db = SQLAlchemy(app)
 db.init_app(app)
 login = LoginManager(app)
@@ -37,7 +31,7 @@ def unauthorized():
 def main():
     #kayttajat = db.execute("SELECT nimi FROM kayttaja").fetchall()
     #kayttajat = Kayttaja.query.all()
-    return render_template("index.html") #, result=kayttajat
+    return render_template("etusivu.html") #, result=kayttajat
 
 @app.route("/more")
 def more():
@@ -81,7 +75,7 @@ def register():
         return redirect(url_for('main'))
     form = RegistrationForm()
     if form.validate_on_submit():
-        existing_user = Kayttaja.query.filter_by(nimi=form.name.data).first()  # Check if user exists
+        existing_user = Kayttaja.query.filter_by(nimi=form.name.data).first()
         if existing_user is None:
             user = Kayttaja(nimi=form.name.data, email=form.email.data)
             user.set_password(form.password.data)
