@@ -7,7 +7,7 @@
 body {
     font-family: 'Open Sans', sans-serif;
     font-size: 16px;
-    background-color: #0F4C81;
+    background-color: #009473;
   }
   
 a {
@@ -25,11 +25,11 @@ li {
 
 nav {
     color: #000;
-    background-color: #0F4C81;
     padding: 0.5rem 1rem;
     display: flex;
-    justify-content: stretch;
+    justify-content: center;
     opacity:0.9;
+    
 }
 nav ul {
     list-style-type: none;
@@ -72,19 +72,14 @@ h3, h4 {
   text-align: center;
 }
 
-.footer {
-    color: #000;
-    padding: 1rem;
-    display: flex;
-    justify-content: center;
-    text-align: center;
-  }
-  
-  .footer p {
-    background-color:#dbabd5;
-    padding: 0.5rem 2rem;
-    opacity: 0.9;
-  }
+footer {
+  margin-top: 15px;
+  padding: 1rem;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  font-size: smaller;
+}
 
   .container {
     display: flex;
@@ -123,16 +118,22 @@ h3, h4 {
   .kayttajalomake{
     display: flex;
     align-items: center;
+    text-align: center;
     justify-content: center;
     flex-direction: column;
     flex-grow: 1;
   }
 
-  #virheviesti {
-    display:none;
-    background-color: #FFF;
-    padding: 5px;
-    border: 1px solid;
+  #viesti {
+    margin: 0 auto;
+  }
+
+  #viesti ul li {
+    display: flex;
+    text-align: center;
+    justify-content: center;
+    font-weight: bolder;
+    padding-top: 20px;
 }
 
   .button {
@@ -150,7 +151,7 @@ h3, h4 {
     font-family: 'Maven Pro', sans-serif;
   }
   .button:hover {
-      background-color: #7b255a;
+    font-size:1.2rem;
     }
 
   .button:disabled {
@@ -165,6 +166,7 @@ h3, h4 {
     text-decoration: none;
     font-weight:bold;
     font-size:1rem;
+    margin-left: 5px;
     display: inline-block;
     border-radius: 20px;
     border-style: none;
@@ -173,8 +175,8 @@ h3, h4 {
 }
 
   .kayttajabutton:hover {
-    background-color: #dbabd5;
-  }
+      font-size:1.2rem;
+      }
 
   .sivunvaihto {
     display: none;
@@ -182,14 +184,13 @@ h3, h4 {
   }
 
   .sivubutton {
-    background-color: #000;
-    color:#FFF;
-    padding: 5px 10px;
+    background-color: #009473;
+    padding: 10px;
     margin:0.5rem;
     text-decoration: none;
     font-weight:bold;
     font-size:1rem;
-    border-radius: 10px;
+    border-radius: 50%;
     border-style: none;
     transition-duration: 0.2s;
     font-family: 'Maven Pro', sans-serif;
@@ -199,9 +200,6 @@ h3, h4 {
   .sivubutton:hover {
       background-color: #7b255a;
     }
-  .kayttajainfo {
-    font-size: smaller;
-  }
 
   #ylos {
       background-color: #000;
@@ -211,7 +209,7 @@ h3, h4 {
       text-decoration: none;
       font-weight:bold;
       font-size:1rem;
-      border-radius: 10px;
+      border-radius: 50%;
       border-style: none;
       transition-duration: 0.2s;
       display: none;
@@ -229,7 +227,7 @@ h3, h4 {
     }
 
   #vinkkiboksi {
-    font-size: smaller;
+    margin-top: 15px;
   }
 
   #aboutboksi {
@@ -260,7 +258,7 @@ h3, h4 {
     background-color: rgba(255, 255, 255, 0.7);
     margin:0.5rem;
     width: 200px;
-    height: 300px;
+    height: 325px;
     flex-wrap: wrap;
     display:flex;
     justify-content: center;
@@ -393,8 +391,7 @@ h3, h4 {
     background-color: #000;
     color:#FFF;
     height: 37px;
-    padding: 2px 5px;
-    margin-top:2px;
+    padding: 10px;
     text-align: center;
     text-decoration: none;
     font-size:1rem;
@@ -403,6 +400,8 @@ h3, h4 {
     border-style: none;
     transition-duration: 0.2s;
     font-family: 'Maven Pro', sans-serif;
+    position:absolute;
+    margin-top:250px;
 }
 
 #katsoLisaa:hover {
@@ -428,6 +427,8 @@ h3, h4 {
     }
     .toggle {
         order: 1;
+        align-items: center;
+        text-align: center;
     }
     .item.button {
         order: 3;
@@ -438,6 +439,7 @@ h3, h4 {
         order: 2;
         display: none;
         background-color: #7b255a;
+        border-radius: 2px;
     }
     .item.active {
         display: block;

@@ -6,15 +6,15 @@ from models import Kayttaja
 class LoginForm(FlaskForm):
     name = StringField('Käyttäjänimi', validators=[DataRequired()])
     password = PasswordField('Salasana', validators=[DataRequired()])
-    submit = SubmitField('Kirjaudu sisään')
+    submit = SubmitField('Kirjaudu')
 
 class RegistrationForm(FlaskForm):
-    name = StringField('Käyttäjänimi', validators=[DataRequired()])
-    email = StringField('Sähköposti', validators=[Length(min=6), DataRequired(), Email()])
-    password = PasswordField('Salasana', validators=[DataRequired(), 
-                                                    Length(min=6, message='Salasanan on oltava vähintään kuusi merkkiä pitkä.')])
+    name = StringField('Käyttäjänimi', validators=[DataRequired(message='Käyttäjänimi on pakollinen tieto.')])
+    email = StringField('Sähköposti', validators=[DataRequired(message='Sähköpostiosoite on pakollinen tieto.'), Email(message='Virheellinen sähköpostiosoite.')])
+    password = PasswordField('Salasana', validators=[DataRequired(message='Salasana on pakollinen tieto.'), 
+                                                    Length(min=6, max=100, message='Salasanan on oltava vähintään kuusi merkkiä pitkä.')])
     password2 = PasswordField(
-        'Salasana uudelleen', validators=[DataRequired(), EqualTo('password', message='Salasana ei täsmää.')])
+        'Salasana uudelleen', validators=[DataRequired(message='Toistathan salasanan.'), EqualTo('password', message='Salasana ei täsmää.')])
     submit = SubmitField('Rekisteröidy')
 
     #def validate_username(self, name):

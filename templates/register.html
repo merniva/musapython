@@ -1,40 +1,54 @@
 {% extends "layout.html" %}
 
-{% block heading %}
-    Rekisteröidy
-{% endblock %}
-
 {% block body %}
-    <form action="" method="post">
-        {{ form.hidden_tag() }}
-        <p>
-            {{ form.name.label }}<br>
-            {{ form.name(size=32) }}<br>
+<div class='container'>
+    <div class='kayttajalomake' >
+        <h2>Rekisteröidy</h2><br>
+        <form action="" method="post" novalidate>
+            {{ form.hidden_tag() }}
             {% for error in form.name.errors %}
-            <span style="color: red;">[{{ error }}]</span>
+                <span>[{{ error }}]</span><br>
             {% endfor %}
-        </p>
-        <p>
-            {{ form.email.label }}<br>
-            {{ form.email(size=64) }}<br>
             {% for error in form.email.errors %}
-            <span style="color: red;">[{{ error }}]</span>
+                <span>[{{ error }}]</span><br>
             {% endfor %}
-        </p>
-        <p>
-            {{ form.password.label }}<br>
-            {{ form.password(size=32) }}<br>
             {% for error in form.password.errors %}
-            <span style="color: red;">[{{ error }}]</span>
+                <span>[{{ error }}]</span><br>
             {% endfor %}
-        </p>
-        <p>
-            {{ form.password2.label }}<br>
-            {{ form.password2(size=32) }}<br>
             {% for error in form.password2.errors %}
-            <span style="color: red;">[{{ error }}]</span>
+                <span>[{{ error }}]</span><br>
             {% endfor %}
-        </p>
-        <p>{{ form.submit() }}</p>
-    </form>
+            <span>
+                <label for="nimi">
+                    </nimi><i class="fas fa-user">*</i>
+                </label>
+                {{ form.name(id="nimi", class="kayttajakentta") }}
+            </span><br>
+            <span>
+                <label for="email">
+                   <i class="fas fa-envelope">*</i>
+                </label>
+                {{ form.email(id="email", class="kayttajakentta") }}
+            </span><br>
+            <span>
+                <label for="password">
+                    <i class="fas fa-lock">*</i>
+                </label>
+                {{ form.password(id="password", class="kayttajakentta") }}
+                
+            </span><br>
+            <span>
+                <label for="password2">
+                    <i class="fas fa-lock">*</i>
+                </label>
+                {{ form.password2(id="password", class="kayttajakentta") }}
+            </span><br>
+            {{ form.submit(class="kayttajabutton") }} <br><br>
+            <p>* = Pakollinen tieto.</p>
+            <p>Huom! Salasanan on oltava vähintään kuusi merkkiä pitkä!</p><br>
+        <p>Onko sinulla jo tunnukset?</p>
+        <p><strong><a href="{{ url_for('login') }}">Kirjaudu sisään tästä.</a></strong></p><br>
+        </form>
+    </div>
+</div>
 {% endblock %}

@@ -16,7 +16,7 @@ function naytaArtisti(artisti, naytaTiedot) {
     laatikko.innerHTML = `
         <div class='tuloslaatikko'>
         <a>
-            <img src="black-1296338_640.png" alt="artistin default-kuva" width="150" height="150"></img>
+            <img src="../static/black-1296338_640.png" alt="artistin default-kuva" width="150" height="150"></img>
             <h3>${artisti.name}</h3>
         </a>
         <button id="katsoLisaa">Katso lisää</button>

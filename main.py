@@ -5,11 +5,6 @@ from config import *
 from forms import LoginForm, RegistrationForm
 from flask_login import LoginManager, current_user, login_user, logout_user, login_required
 
-#from sqlalchemy import create_engine
-#from sqlalchemy.orm import scoped_session, sessionmaker
-
-#engine = create_engine('mysql+pymysql://Admin:admin1@localhost/musahaku')
-#db = scoped_session(sessionmaker(bind=engine))
 
 db = SQLAlchemy(app)
 db.init_app(app)
@@ -26,28 +21,19 @@ def unauthorized():
     flash('Kirjaudu sisään nähdäksesi sivun.')
     return redirect(url_for('login'))
 
-
 @app.route('/', methods=('GET', 'POST'))
 def main():
-    #kayttajat = db.execute("SELECT nimi FROM kayttaja").fetchall()
-    #kayttajat = Kayttaja.query.all()
-    return render_template("etusivu.html") #, result=kayttajat
+    return render_template("etusivu.html")
 
-@app.route("/more")
-def more():
-    return render_template("more.html")
+@app.route("/artistihaku", methods=['GET', 'POST'])
+def artistihaku():
+    return render_template("artistihaku.html")
 
-@app.route("/hello", methods=['GET', 'POST'])
+@app.route("/kayttajahaku", methods=['GET', 'POST'])
 @login_required
-def hello():
-    name = request.form.get("name")
-    name = name.capitalize()
-    return render_template("hello.html", name=name)
+def kayttajahaku():
+    return render_template("kayttajahaku.html")
 
-@app.route("/money", methods=["POST"])
-def money():
-    amount = request.form.get("amount")
-    return render_template("money.html", amount=amount)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -58,10 +44,10 @@ def login():
         user = Kayttaja.query.filter_by(nimi=form.name.data).first()
         if user is None or not user.check_password(form.password.data):
             flash('Virheellinen käyttäjänimi tai salasana!')
-            return render_template('index.html')
+            return redirect(url_for('login'))
         login_user(user)
         next_page = request.args.get('next')
-        return redirect(next_page or url_for('main'))
+        return redirect(next_page or url_for('kayttajahaku'))
     return render_template('login.html', title='Kirjaudu sisään', form=form)
 
 @app.route('/logout')
@@ -85,7 +71,7 @@ def register():
             return redirect(url_for('login'))
         flash('Käyttäjänimi on jo varattu.')
         return redirect(url_for('register'))
-    return render_template('register.html', title='Register', form=form)
+    return render_template('register.html', title='Rekisteröidy', form=form)
 
 if __name__ == "__main__":
     main()

@@ -16,29 +16,34 @@
                 <ul class="menu">
                     <li class="item"><a href="#">About</a></li>
                     <li class="item"><a href="{{ url_for('main') }}">Genret</a></li>
-                    <li class="item"><a href="#">Artistit</a></li>
+                    <li class="item"><a href="{{ url_for('artistihaku') }}">Artistit</a></li>
                     {% if current_user.is_anonymous %}
-                    <li class="item"><i class="fas fa-sign-in-alt"></i><a href="{{ url_for('login') }}">Kirjaudu sisään</a></li>
+                    <li class="item"><i class="fas fa-sign-in-alt"></i><a href="{{ url_for('login') }}"> Kirjaudu sisään</a></li>
                     {% else %}
-                    <li class="item"><a href="#">Hae käyttäjänimellä</a></li>
-                    <li class="item"><i class="fas fa-sign-out-alt"></i><a href="{{ url_for('logout') }}">Kirjaudu ulos</a></li>
+                    <li class="item"><a href="{{ url_for('kayttajahaku') }}">Hae käyttäjänimellä</a></li>
+                    <li class="item"><i class="fas fa-sign-out-alt"></i><a href="{{ url_for('logout') }}"> Kirjaudu ulos</a></li>
                     {% endif %}
                     <li class="toggle"><a href="#"><i class="fas fa-bars"></i></a></li>
                 </ul>
             </nav>
         </div>
-        {% with messages = get_flashed_messages() %}
-        {% if messages %}
-        <ul>
-            {% for message in messages %}
-            <li>{{ message }}</li>
-            {% endfor %}
-        </ul>
-        {% endif %}
-        {% endwith %}
         <h1>{% block heading %}{% endblock %}</h1>
+        <div id=viesti>
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+            <ul>
+                {% for message in messages %}
+                <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+            {% endwith %}
+            </div>
         {% block body %}
         {% endblock %}
+        <footer>
+            <p>All the music information provided by <strong><a href="https://www.last.fm/">last.fm.</a></strong></p>
+        </footer>
         <script>
             // linkkivalikko
             $(function() {
