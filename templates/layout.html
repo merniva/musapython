@@ -14,7 +14,6 @@
         <div>
             <nav>
                 <ul class="menu">
-                    <li class="item"><a href="#">About</a></li>
                     <li class="item"><a href="{{ url_for('main') }}">Genret</a></li>
                     <li class="item"><a href="{{ url_for('artistihaku') }}">Artistit</a></li>
                     {% if current_user.is_anonymous %}
@@ -28,7 +27,7 @@
             </nav>
         </div>
         <h1>{% block heading %}{% endblock %}</h1>
-        <div id=viesti>
+        <div id=msg>
             {% with messages = get_flashed_messages() %}
             {% if messages %}
             <ul>

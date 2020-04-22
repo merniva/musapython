@@ -1,42 +1,40 @@
 {% extends "layout.html" %}
 
 {% block body %}
-<div class='kehys'>
-    <div class='header'>
-        <button onclick="siirraYlos()" id="ylos" title="ylos"><i class="fas fa-chevron-up"></i></button>
-    </div>
-    <div class='container'>
-            <h2>Hae samankaltaisia artisteja <i class="fas fa-search"></i></h2><br>
-            <form action="" method="get" class="haku" id="artistihaku">
-                <input name="nimi" class="hakukentta" id="hakukentta" placeholder="Anna artistin nimi" autocomplete="off"><br>
-                <input type="submit" name="button" class="button" id="hakubutton" value="HAE">
-            </form><br>
-    </div>
-    <div id='lataus'>
-    </div>
-    <div id='tulokset'>
-    </div>
-    <div class='sivunvaihto' id="sivunvaihto">
-        <span><button type="button" class="sivubutton" id="edellinen"><<</button><span id="sivunro"></span><button type="button" class="sivubutton" id="seuraava">>></button></span>
-    </div>
-    <div id="infoModal" class="modal">
-        <div class="modalSisalto">
-            <p class="close" id="close">&times;
-            </p>
-            <h4 id="artistiOtsikko">Odota hetki...</h4>
-            <p id="artistiInfo"></p><br>
-            <h4>Genret: </h4>
-            <div id='artistiGenreTagit'></div><br>
-            <h4>Samankaltaisia artisteja:</h4>
-            <div id="samankaltaiset"></div><br>
-        </div>
+<div class='moveup'>
+    <button onclick="moveUp()" id="upButton" title="up"><i class="fas fa-chevron-up"></i></button>
+</div>
+<main>
+        <h2>Hae samankaltaisia artisteja <i class="fas fa-search"></i></h2><br>
+        <form action="" method="get" class="search" id="searchforartist">
+            <input name="nimi" class="searchfield" id="searchfield" placeholder="Anna artistin nimi" autocomplete="off"><br>
+            <input type="submit" name="button" class="searchbutton" id="searchbutton" value="HAE">
+        </form><br>
+</main>
+<div id='loading'>
+</div>
+<div id='results'>
+</div>
+<div class='pagination' id="pagination">
+    <span><button type="button" class="pagebutton" id="previouspage"><<</button><span id="pagenr"></span><button type="button" class="pagebutton" id="nextpage">>></button></span>
+</div>
+<div id="infoModal" class="modal">
+    <div class="modalcontent">
+        <p class="close" id="close">&times;
+        </p>
+        <h4 id="artistiOtsikko">Odota hetki...</h4>
+        <p id="artistiInfo"></p><br>
+        <h4>Genret: </h4>
+        <div id='smallergenretags'></div><br>
+        <h4>Samankaltaisia artisteja:</h4>
+        <div id="similar"></div><br>
     </div>
 </div>
 
 <script> 
 
 // tee uusi haku infoboksista klikatun artistin mukaan
-    window.uusiHaku = uusiHaku;
+    window.newSearch = newSearch;
 
 // info-ikkunan avaus
     function naytaInfo(artistiNimi) {
@@ -53,63 +51,63 @@
             }
         }
         document.getElementById("artistiOtsikko").innerHTML = artistiNimi;
-        let artistiHaku = encodeURIComponent(artistiNimi);
+        let searchArtist = encodeURIComponent(artistiNimi);
         $.ajax({
             async:true,
             type: 'GET',
-            url: `http://ws.audioscrobbler.com/2.0/?method=artist.getinfo&artist=${artistiHaku}&api_key=b7ba2a47c41146f14422726a121f27b7&format=json`,
+            url: `http://ws.audioscrobbler.com/2.0/?method=artist.getinfo&artist=${searchArtist}&api_key=b7ba2a47c41146f14422726a121f27b7&format=json`,
             success: (payload) => {
                 console.log(payload)
                 document.getElementById("artistiInfo").innerHTML = payload.artist.bio.summary;
-                document.getElementById("samankaltaiset").innerHTML = payload.artist.similar.artist
-                    .map(({name,url})=>`<span><a onclick='uusiHaku("${name}")'>${name}</a></span>`).join(", ");
+                document.getElementById("similar").innerHTML = payload.artist.similar.artist
+                    .map(({name,url})=>`<span><a onclick='newSearch("${name}")'>${name}</a></span>`).join(", ");
             }
         });
-        let artistigenreurl = `http://ws.audioscrobbler.com/2.0/?method=artist.gettoptags&artist=${artistiHaku}&api_key=b7ba2a47c41146f14422726a121f27b7&format=json`;
+        let artistigenreurl = `http://ws.audioscrobbler.com/2.0/?method=artist.gettoptags&artist=${searchArtist}&api_key=b7ba2a47c41146f14422726a121f27b7&format=json`;
         $.ajax({
             async:true,
             type: 'GET',
             url: artistigenreurl,
             success: (payload) => {
                 console.log(payload)
-                let hakutulos = payload.toptags.tag.map(({name, url})=>`<span><a href="${url}">${name}</a></span>`);
-                let ekatViisi = hakutulos.filter((tagi,index)=> index<5).join(", ");
-                document.getElementById("artistiGenreTagit").innerHTML = ekatViisi;
+                let searchresult = payload.toptags.tag.map(({name, url})=>`<span><a href="${url}">${name}</a></span>`);
+                let ekatViisi = searchresult.filter((tagi,index)=> index<5).join(", ");
+                document.getElementById("smallergenretags").innerHTML = ekatViisi;
             }
         });
     }
 
 // scrollaa takaisin ylös -nappi
-let scrollaaYlos = document.getElementById("ylos");
-window.onscroll = function() {scrollFunction(scrollaaYlos)};
+let scrollUp = document.getElementById("upButton");
+window.onscroll = function() {scrollFunction(scrollUp)};
 
 
-// haetaan tulokset
-    function teeHaku(event) {
-        document.getElementById('hakubutton').disabled = true;
-        document.getElementById('tulokset').innerHTML = "";
-        document.getElementById('lataus').innerHTML = "Ladataan...";
+// haetaan results
+    function fetchResults(event) {
+        document.getElementById('searchbutton').disabled = true;
+        document.getElementById('results').innerHTML = "";
+        document.getElementById('loading').innerHTML = "Ladataan...";
         event.preventDefault();
-        let lomake = document.getElementById("artistihaku");
+        let lomake = document.getElementById("searchforartist");
         let datalomake = new FormData(lomake);
         let nimi = datalomake.get("nimi");
-        let artistihaku = `http://ws.audioscrobbler.com/2.0/?method=artist.getsimilar&artist=${nimi}&limit=30&api_key=b7ba2a47c41146f14422726a121f27b7&format=json`;
-        console.log(artistihaku);
-        document.getElementById("tulokset").innerHTML = "";
+        let searchArtistUrl = `http://ws.audioscrobbler.com/2.0/?method=artist.getsimilar&artist=${nimi}&limit=30&api_key=b7ba2a47c41146f14422726a121f27b7&format=json`;
+        console.log(searchArtistUrl);
+        document.getElementById("results").innerHTML = "";
         setTimeout(() => {
-        document.getElementById('hakubutton').disabled = false;
+        document.getElementById('searchbutton').disabled = false;
         },  1000);
             $.ajax({
                 async:true,
                 type: 'GET',
-                url: artistihaku,
+                url: searchArtistUrl,
                 success: (payload) => {
                     console.log(payload)
                     if (payload.error) {
-                        document.getElementById('lataus').innerHTML = "Yhtään tulosta ei löytynyt!";
+                        document.getElementById('loading').innerHTML = "Yhtään tulosta ei löytynyt!";
                     } else {
-                    payload.similarartists.artist.forEach((artist)=> naytaArtisti(artist, naytaInfo));
-                    document.getElementById('lataus').innerHTML = "";
+                    payload.similarartists.artist.forEach((artist)=> showArtist(artist, naytaInfo));
+                    document.getElementById('loading').innerHTML = "";
                     }
                 }
             });
@@ -117,8 +115,8 @@ window.onscroll = function() {scrollFunction(scrollaaYlos)};
 
 
 // hae-buttonin aktivointi
-    $(".haku").submit(function(event) {
-        teeHaku(event);
+    $(".search").submit(function(event) {
+        fetchResults(event);
     });
 </script>
 {% endblock %}

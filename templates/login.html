@@ -1,8 +1,8 @@
 {% extends "layout.html" %}
 
 {% block body %}
-<div class='container'>
-    <div class='kayttajalomake' >
+<main>
+    <div class='userform' >
         <h2>Kirjaudu</h2><br>
         <p class="kayttajainfo"></p>
         <form action="" method="post" novalidate>
@@ -11,7 +11,7 @@
             <label for="nimi">
                 <i class="fas fa-user"></i>
             </label>
-            {{ form.name(id="nimi", class="kayttajakentta") }}
+            {{ form.name(id="nimi", class="userfield") }}
             {% for error in form.name.errors %}
             <span style="color: red;">[{{ error }}]</span>
             {% endfor %}
@@ -20,15 +20,15 @@
             <label for="salasana">
                 <i class="fas fa-lock"></i>
             </label>
-            {{ form.password(id="salasana", class="kayttajakentta") }}
+            {{ form.password(id="salasana", class="userfield") }}
             {% for error in form.name.errors %}
             <span style="color: red;">[{{ error }}]</span>
             {% endfor %}
         </span><br><br>
-        {{ form.submit(class="kayttajabutton") }} <br><br>
+        {{ form.submit(class="userbutton") }} <br><br>
         <p>Eikö sinulla ole vielä tunnuksia? </p>
         <p><strong><a href="{{ url_for('register') }}">Luo tunnukset tästä.</a></strong></p><br>
         </form>
     </div>
-</div>
+</main>
 {% endblock %}

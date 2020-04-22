@@ -1,60 +1,60 @@
 
-// tee uusi haku infoboksista klikatun hakusanan mukaan
-function uusiHaku(haettava) {
+// new search by searchword from infobox
+function newSearch(haettava) {
     let siivottuArvo = haettava
         .replace(" & ", "&")
         .replace(" + ", "+");
     document.getElementById("close").click();
-    document.getElementById("hakukentta").value = siivottuArvo;
-    document.getElementById("hakubutton").click();
-    siirraYlos();
+    document.getElementById("searchfield").value = siivottuArvo;
+    document.getElementById("searchbutton").click();
+    moveUp();
 }
 
-// artistihakutulosten järjestäminen
-function naytaArtisti(artisti, naytaTiedot) {
+// show results from Artist search
+function showArtist(artisti, naytaTiedot) {
     let laatikko = document.createElement("div");
     laatikko.innerHTML = `
-        <div class='tuloslaatikko'>
+        <div class='resultbox'>
         <a>
             <img src="../static/black-1296338_640.png" alt="artistin default-kuva" width="150" height="150"></img>
             <h3>${artisti.name}</h3>
         </a>
-        <button id="katsoLisaa">Katso lisää</button>
+        <button id="seemore">Katso lisää</button>
         </div>
         `;
     laatikko.onclick=()=> naytaTiedot(artisti.name)
-    document.getElementById('tulokset').appendChild(laatikko)
+    document.getElementById('results').appendChild(laatikko)
 }
 
 
-// albumihakutulosten järjestäminen
-function naytaAlbumi(albumi, naytaTiedot) {
+// show results from Album search
+function showAlbum(albumi, naytaTiedot) {
     let laatikko = document.createElement("div");
     laatikko.innerHTML = `
-        <div class='tuloslaatikko'>
+        <div class='resultbox'>
         <a>
             <img src="${albumi.image[2]["#text"]}" width="160" height="160"></img>
             <h3>${albumi.artist.name}:<br></h3>
-            <p class = "hakutulos">${albumi.name}</p>
+            <p class = "searchresult">${albumi.name}</p>
         </a>
-        <button id="katsoLisaa">Katso lisää</button>
+        <button id="seemore">Katso lisää</button>
         </div>
         `;
     laatikko.onclick=()=> naytaTiedot(albumi.name, albumi.artist.name)
-    document.getElementById('tulokset').appendChild(laatikko)
+    document.getElementById('results').appendChild(laatikko)
 }
 
-// takaisin ylös -napin näyttäminen
-function scrollFunction(takaisinYlos) {
+// show back to top-button
+function scrollFunction(showUpButton) {
     if (document.body.scrollTop > 50 || document.documentElement.scrollTop > 50) {
-      takaisinYlos.style.display = "block";
+      showUpButton.style.display = "block";
     } else {
-      takaisinYlos.style.display = "none";
+      showUpButton.style.display = "none";
     }
   }
   
-  // siirtyminen ylös
-function siirraYlos() {
+  // move back to top
+function moveUp() {
     document.body.scrollTop = 0;
     document.documentElement.scrollTop = 0;
 }

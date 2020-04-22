@@ -1,110 +1,106 @@
 {% extends "layout.html" %}
 
 {% block body %}
-
-<div class='kehys'>
-    <!--linkkivalikko tähän-->
-    <div class='header'>
-        <button onclick="siirraYlos()" id="ylos" title="ylos"><i class="fas fa-chevron-up"></i></button>
-    </div>
-    <div class='container'>
-            <h2>Hae genren perusteella <i class="fas fa-search"></i></h2><br>
-            <form action="" method="get" class="haku" id="genrehaku">
-                <input type="radio" id="albumi" name="genrevalinta" value="albumi" checked>
-                    <label for="albumi">Hae albumeita &nbsp;</label>
-                <input type="radio" id="artisti" name="genrevalinta" value="artisti">
-                    <label for="artisti">Hae artisteja</label><br><br>
-                <input name="nimi" class="hakukentta" id="hakukentta" placeholder="Anna genren nimi" autocomplete="off" required><br>
-                <input type="submit" name="button" class="button" id="hakubutton" value="HAE"><br>
-                <div id= "vinkkiboksi">
-                    <strong>Vinkki!</strong> Haethan vain yhtä genreä kerrallaan. <br>
-                    <p>Kokeile hakua esimerkiksi musiikkityyleittäin (esim. <i>post-punk</i>),<br> soittimittain (esim. <i>violin</i>) tai vuoden perusteella (esim. <i>1990</i>).</p>
-                </div>
-            </form><br>
-    </div>
-    <div id='lataus'>
-    </div>
-    <div id='tulokset'>
-    </div>
-    <div class='sivunvaihto' id="sivunvaihto">
-        <span><button type="button" class="sivubutton" id="edellinen"><<</button><span id="sivunro"></span><button type="button" class="sivubutton" id="seuraava">>></button></span>
-    </div>
-    <div id="infoModal" class="modal">
-        <div class="modalSisalto">
-            <p class="close" id="close">&times;
-            </p>
-            <div class="infoOtsikko" id="infoOtsikko">Odota hetki...</div><br>
-            <div id="infoSisalto"></div><br>
-            <h4>Genret: </h4>
-            <div id='genreTagit'></div><br>
-            <h5 id="lisaOtsikko"></h5>
-            <ul id="lisaInfo"></ul>
-        </div>
+<div class='moveup'>
+    <button onclick="moveUp()" id="upButton" title="up"><i class="fas fa-chevron-up"></i></button>
+</div>
+<main>
+        <h2>Hae genren perusteella <i class="fas fa-search"></i></h2><br>
+        <form action="" method="get" class="search" id="genresearch">
+            <input type="radio" id="albumi" name="genrechoice" value="albumi" checked>
+                <label for="albumi">Hae albumeita &nbsp;</label>
+            <input type="radio" id="artisti" name="genrechoice" value="artisti">
+                <label for="artisti">Hae artisteja</label><br><br>
+            <input name="nimi" class="searchfield" id="searchfield" placeholder="Anna genren nimi" autocomplete="off" required><br>
+            <input type="submit" name="button" class="searchbutton" id="searchbutton" value="HAE"><br>
+            <div id= "searchtip">
+                <strong>Vinkki!</strong> Haethan vain yhtä genreä kerrallaan. <br>
+                <p>Kokeile hakua esimerkiksi musiikkityyleittäin (esim. <i>post-punk</i>),<br> soittimittain (esim. <i>violin</i>) tai vuoden perusteella (esim. <i>1990</i>).</p>
+            </div>
+        </form><br>
+</main>
+<div id='loading'>
+</div>
+<div id='results'>
+</div>
+<div class='pagination' id="pagination">
+    <span><button type="button" class="pagebutton" id="previouspage"><<</button><span id="pagenr"></span><button type="button" class="pagebutton" id="nextpage">>></button></span>
+</div>
+<div id="infoModal" class="modal">
+    <div class="modalcontent">
+        <p class="close" id="close">&times;
+        </p>
+        <div class="infoheader" id="infoheader">Odota hetki...</div><br>
+        <div id="infocontent"></div><br>
+        <h4>Genret: </h4>
+        <div id='genretags'></div><br>
+        <h5 id="secondinfoheader"></h5>
+        <ul id="additionalinfo"></ul>
     </div>
 </div>
 
 
 <script>
 
-// tee uusi haku infoboksista klikatun genren mukaan
-    window.uusiHaku = uusiHaku;
+// search again by a genrelink from infobox
+    window.newSearch = newSearch;
 
-// infoikkunan avaus
+// open infobox
    function naytaInfo(artistiNimi) {
-        document.getElementById("infoSisalto").innerHTML = "Ladataan...";
+        document.getElementById("infocontent").innerHTML = "Ladataan...";
         var modal = document.getElementById("infoModal");
         var p = document.getElementsByClassName("close")[0];
         modal.style.display = "block";
-        // sulkeminen klikkauksella
+        // close by click
         p.onclick = function() {
             modal.style.display = "none";
-            document.getElementById("lisaOtsikko").innerHTML ="";
-            document.getElementById("lisaInfo").innerHTML = "";
+            document.getElementById("secondinfoheader").innerHTML ="";
+            document.getElementById("additionalinfo").innerHTML = "";
         }
         window.onclick = function(event) {
             if (event.target == modal) {
                 modal.style.display = "none";
-                document.getElementById("lisaOtsikko").innerHTML ="";
-                document.getElementById("lisaInfo").innerHTML = "";
+                document.getElementById("secondinfoheader").innerHTML ="";
+                document.getElementById("additionalinfo").innerHTML = "";
             }
         }
-        document.getElementById("infoOtsikko").innerHTML = artistiNimi;
-        // haetaan lisäinfo
-        let artistiHaku = encodeURIComponent(artistiNimi);
+        document.getElementById("infoheader").innerHTML = artistiNimi;
+        // get additional info
+        let searchArtist = encodeURIComponent(artistiNimi);
         $.ajax({
             async:true,
             type: 'GET',
-            url: `http://ws.audioscrobbler.com/2.0/?method=artist.getinfo&artist=${artistiHaku}&api_key=b7ba2a47c41146f14422726a121f27b7&format=json`,
+            url: `http://ws.audioscrobbler.com/2.0/?method=artist.getinfo&artist=${searchArtist}&api_key=b7ba2a47c41146f14422726a121f27b7&format=json`,
             success: (payload) => {
                 console.log(payload)
-                // näytetään artistibio ja samankaltaiset artistit
-                document.getElementById("infoSisalto").innerHTML = payload.artist.bio.summary;
-                document.getElementById("lisaOtsikko").innerHTML ="Samankaltaisia artisteja:";
-                document.getElementById("lisaInfo").innerHTML = payload.artist.similar.artist
+                // show artist biography and similar artists
+                document.getElementById("infocontent").innerHTML = payload.artist.bio.summary;
+                document.getElementById("secondinfoheader").innerHTML ="Samankaltaisia artisteja:";
+                document.getElementById("additionalinfo").innerHTML = payload.artist.similar.artist
                     .map(({name,url})=>`<li><a href="${url}">${name}</a></li>`).join("");
             }
         });
-        let artistigenreurl = `http://ws.audioscrobbler.com/2.0/?method=artist.gettoptags&artist=${artistiHaku}&api_key=b7ba2a47c41146f14422726a121f27b7&format=json`;
+        let artistigenreurl = `http://ws.audioscrobbler.com/2.0/?method=artist.gettoptags&artist=${searchArtist}&api_key=b7ba2a47c41146f14422726a121f27b7&format=json`;
         $.ajax({
             async:true,
             type: 'GET',
             url: artistigenreurl,
             success: (payload) => {
                 console.log(payload)
-                let hakutulos = payload.toptags.tag.map(({name})=>`<span><a onclick='uusiHaku("${name}")'>${name}</a></span>`);
-                let ekatViisi = hakutulos.filter((tagi,index)=> index<5).join(", ");
-                document.getElementById("genreTagit").innerHTML = ekatViisi;
+                let searchresult = payload.toptags.tag.map(({name})=>`<span><a onclick='newSearch("${name}")'>${name}</a></span>`);
+                let ekatViisi = searchresult.filter((tagi,index)=> index<5).join(", ");
+                document.getElementById("genretags").innerHTML = ekatViisi;
             }
         });
     }
 
-// albumi-info
+// album-info
     function albumiInfo(albumiNimi, artistiNimi) {
-        document.getElementById("infoSisalto").innerHTML = "Ladataan...";
+        document.getElementById("infocontent").innerHTML = "Ladataan...";
         var modal = document.getElementById("infoModal");
         var p = document.getElementsByClassName("close")[0];
         modal.style.display = "block";
-        // sulkeminen klikkauksella
+        // close by click
         p.onclick = function() {
             modal.style.display = "none";
         }
@@ -113,83 +109,83 @@
                 modal.style.display = "none";
             }
         }
-        document.getElementById("infoOtsikko").innerHTML = `${artistiNimi}: ${albumiNimi}`;
-        // haetaan lisäinfo
-        let artistiHaku = encodeURIComponent(artistiNimi);
-        let albumiHaku = encodeURIComponent(albumiNimi);
+        document.getElementById("infoheader").innerHTML = `${artistiNimi}: ${albumiNimi}`;
+        // get additional info
+        let searchArtist = encodeURIComponent(artistiNimi);
+        let searchAlbum = encodeURIComponent(albumiNimi);
         $.ajax({
             async:true,
             type: 'GET',
-            url: `http://ws.audioscrobbler.com/2.0/?method=album.getinfo&api_key=b7ba2a47c41146f14422726a121f27b7&artist=${artistiHaku}&album=${albumiHaku}&format=json`,
+            url: `http://ws.audioscrobbler.com/2.0/?method=album.getinfo&api_key=b7ba2a47c41146f14422726a121f27b7&artist=${searchArtist}&album=${searchAlbum}&format=json`,
             success: (payload) => {
                 console.log(payload)
-                // näytetään albumiwiki ja kappalelistaus (jos wikiä ei löydy, pelkkä kappalelistaus)
+                // show album biography and tracks
                 if (payload.album.wiki) {
-                    document.getElementById("infoSisalto").innerHTML = payload.album.wiki.summary;
-                    document.getElementById("lisaInfo").innerHTML = "<h3>Kappaleet:</h3>"+payload.album.tracks.track
+                    document.getElementById("infocontent").innerHTML = payload.album.wiki.summary;
+                    document.getElementById("additionalinfo").innerHTML = "<h3>Kappaleet:</h3>"+payload.album.tracks.track
                     .map(({name})=>`<li>${name}</li>`).join("");
                 } else {
-                    document.getElementById("infoSisalto").innerHTML = "";
-                    document.getElementById("lisaInfo").innerHTML = "<h3>Kappaleet:</h3>"+payload.album.tracks.track
+                    document.getElementById("infocontent").innerHTML = "";
+                    document.getElementById("additionalinfo").innerHTML = "<h3>Kappaleet:</h3>"+payload.album.tracks.track
                     .map(({name})=>`<li>${name}</li>`).join("");
                 }
             }
         });
-        let albumigenreurl = `http://ws.audioscrobbler.com/2.0/?method=album.gettoptags&artist=${artistiHaku}&album=${albumiHaku}&api_key=b7ba2a47c41146f14422726a121f27b7&format=json`;
+        let albumigenreurl = `http://ws.audioscrobbler.com/2.0/?method=album.gettoptags&artist=${searchArtist}&album=${searchAlbum}&api_key=b7ba2a47c41146f14422726a121f27b7&format=json`;
         $.ajax({
             async:true,
             type: 'GET',
             url: albumigenreurl,
             success: (payload) => {
                 console.log(payload)
-                let hakutulos = payload.toptags.tag.map(({name})=>`<span><a onclick='uusiHaku("${name}")'>${name}</a></span>`);
-                let ekatViisi = hakutulos.filter((tagi,index)=> index<5).join(", ");
-                document.getElementById("genreTagit").innerHTML = ekatViisi;
+                let searchresult = payload.toptags.tag.map(({name})=>`<span><a onclick='newSearch("${name}")'>${name}</a></span>`);
+                let ekatViisi = searchresult.filter((tagi,index)=> index<5).join(", ");
+                document.getElementById("genretags").innerHTML = ekatViisi;
             }
         });
     }
 
 
 
-// scrollaa takaisin ylös -nappi
-let scrollaaYlos = document.getElementById("ylos");
-window.onscroll = function() {scrollFunction(scrollaaYlos)};
+// scroll back to top-button
+let scrollUp = document.getElementById("upButton");
+window.onscroll = function() {scrollFunction(scrollUp)};
 
 
-// sivunvaihto
+// pagination
 let sivu = 1;
 
-$("#edellinen").click(function(event){
+$("#previouspage").click(function(event){
     if (sivu > 1){
         sivu--;
-        teeHaku(event);
-        siirraYlos();
+        fetchResults(event);
+        moveUp();
     }
 })
 
-$("#seuraava").click(function(event){
+$("#nextpage").click(function(event){
     sivu++;
-    teeHaku(event);
-    siirraYlos();
+    fetchResults(event);
+    moveUp();
 })
 
 
-// haetaan tulokset
-    function teeHaku(event) {
-        document.getElementById('hakubutton').disabled = true;
-        document.getElementById('tulokset').innerHTML = "";
-        document.getElementById('lataus').innerHTML = "Ladataan...";
-        document.getElementById('sivunvaihto').style.display = "flex";
-        document.getElementById('sivunro').innerHTML = sivu;
+// fetch the results by given genre
+    function fetchResults(event) {
+        document.getElementById('searchbutton').disabled = true;
+        document.getElementById('results').innerHTML = "";
+        document.getElementById('loading').innerHTML = "Ladataan...";
+        document.getElementById('pagination').style.display = "flex";
+        document.getElementById('pagenr').innerHTML = sivu;
         event.preventDefault();
-        let lomake = document.getElementById("genrehaku");
+        let lomake = document.getElementById("genresearch");
         let datalomake = new FormData(lomake);
         let nimi = datalomake.get("nimi");
-        let genre = datalomake.get("genrevalinta");
+        let genre = datalomake.get("genrechoice");
         let artistiurl = `http://ws.audioscrobbler.com/2.0/?method=tag.gettopartists&tag=${nimi}&page=${sivu}&limit=24&api_key=b7ba2a47c41146f14422726a121f27b7&format=json`;
         let albumiurl = `http://ws.audioscrobbler.com/2.0/?method=tag.gettopalbums&tag=${nimi}&page=${sivu}&limit=24&api_key=b7ba2a47c41146f14422726a121f27b7&format=json`;
         setTimeout(() => {
-        document.getElementById('hakubutton').disabled = false;
+        document.getElementById('searchbutton').disabled = false;
         },  1000);
         if (genre === "artisti") {
             $.ajax({
@@ -199,10 +195,10 @@ $("#seuraava").click(function(event){
                 success: (payload) => {
                     console.log(payload)
                     if (payload.topartists.artist.length === 0) {
-                        document.getElementById('lataus').innerHTML = "Yhtään tulosta ei löytynyt!";
+                        document.getElementById('loading').innerHTML = "Yhtään tulosta ei löytynyt!";
                     } else {
-                    payload.topartists.artist.forEach((artist)=> naytaArtisti(artist, naytaInfo));
-                    document.getElementById('lataus').innerHTML = ""; 
+                    payload.topartists.artist.forEach((artist)=> showArtist(artist, naytaInfo));
+                    document.getElementById('loading').innerHTML = ""; 
                     }
                 }
             });
@@ -214,10 +210,10 @@ $("#seuraava").click(function(event){
                 success: (payload) => {
                     console.log(payload)
                     if (payload.albums.album.length === 0) {
-                        document.getElementById('lataus').innerHTML = "Yhtään tulosta ei löytynyt!";
+                        document.getElementById('loading').innerHTML = "Yhtään tulosta ei löytynyt!";
                     } else {
-                    payload.albums.album.forEach((album)=> naytaAlbumi(album, albumiInfo));
-                    document.getElementById('lataus').innerHTML = ""; 
+                    payload.albums.album.forEach((album)=> showAlbum(album, albumiInfo));
+                    document.getElementById('loading').innerHTML = ""; 
                     }
                 }
             });
@@ -225,10 +221,10 @@ $("#seuraava").click(function(event){
 
     } 
 
-// hae-buttonin aktivointi
-    $(".haku").submit(function(event){
+// activate search-button
+    $(".search").submit(function(event){
         sivu = 1;
-        teeHaku(event);
+        fetchResults(event);
     });
 </script>
 {% endblock %}
