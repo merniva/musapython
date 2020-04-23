@@ -13,7 +13,7 @@
             </label>
             {{ form.name(id="nimi", class="userfield") }}
             {% for error in form.name.errors %}
-            <span style="color: red;">[{{ error }}]</span>
+                <span>[{{ error }}]</span>
             {% endfor %}
         </span><br>
         <span>
@@ -22,7 +22,7 @@
             </label>
             {{ form.password(id="salasana", class="userfield") }}
             {% for error in form.name.errors %}
-            <span style="color: red;">[{{ error }}]</span>
+                <span>[{{ error }}]</span>
             {% endfor %}
         </span><br><br>
         {{ form.submit(class="userbutton") }} <br><br>

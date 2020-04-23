@@ -126,7 +126,7 @@ h3, h4 {
   padding-top: 20px;
 }
 
-.searchbutton {
+.searchbutton, .userbutton {
   background-color: #000;
   color:#FFF;
   padding: 10px 50px;
@@ -140,33 +140,13 @@ h3, h4 {
   transition-duration: 0.2s;
   font-family: 'Maven Pro', sans-serif;
 }
-.searchbutton:hover {
+.searchbutton:hover, .userbutton:hover {
   font-size:1.2rem;
   }
 
-.searchbutton:disabled {
+.searchbutton:disabled, .userbutton:disabled {
   background-color: rgb(41, 41, 41);
   }
-
-.userbutton {
-  background-color: #000;
-  color:#FFF;
-  padding: 10px 60px;
-  text-align: center;
-  text-decoration: none;
-  font-weight:bold;
-  font-size:1rem;
-  margin-left: 5px;
-  display: inline-block;
-  border-radius: 20px;
-  border-style: none;
-  transition-duration: 0.2s;
-  font-family: 'Maven Pro', sans-serif;
-}
-
-.userbutton:hover {
-    font-size:1.2rem;
-    }
 
 .pagination {
   display: none;

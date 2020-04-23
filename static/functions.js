@@ -1,19 +1,19 @@
 
-// new search by searchword from infobox
+// new search by keyword from infobox
 function newSearch(haettava) {
-    let siivottuArvo = haettava
+    let strippedValue = haettava
         .replace(" & ", "&")
         .replace(" + ", "+");
     document.getElementById("close").click();
-    document.getElementById("searchfield").value = siivottuArvo;
+    document.getElementById("searchfield").value = strippedValue;
     document.getElementById("searchbutton").click();
     moveUp();
 }
 
 // show results from Artist search
 function showArtist(artisti, naytaTiedot) {
-    let laatikko = document.createElement("div");
-    laatikko.innerHTML = `
+    let result = document.createElement("div");
+    result.innerHTML = `
         <div class='resultbox'>
         <a>
             <img src="../static/black-1296338_640.png" alt="artistin default-kuva" width="150" height="150"></img>
@@ -22,15 +22,15 @@ function showArtist(artisti, naytaTiedot) {
         <button id="seemore">Katso lisää</button>
         </div>
         `;
-    laatikko.onclick=()=> naytaTiedot(artisti.name)
-    document.getElementById('results').appendChild(laatikko)
+    result.onclick=()=> naytaTiedot(artisti.name)
+    document.getElementById('results').appendChild(result)
 }
 
 
 // show results from Album search
 function showAlbum(albumi, naytaTiedot) {
-    let laatikko = document.createElement("div");
-    laatikko.innerHTML = `
+    let result = document.createElement("div");
+    result.innerHTML = `
         <div class='resultbox'>
         <a>
             <img src="${albumi.image[2]["#text"]}" width="160" height="160"></img>
@@ -40,8 +40,8 @@ function showAlbum(albumi, naytaTiedot) {
         <button id="seemore">Katso lisää</button>
         </div>
         `;
-    laatikko.onclick=()=> naytaTiedot(albumi.name, albumi.artist.name)
-    document.getElementById('results').appendChild(laatikko)
+    result.onclick=()=> naytaTiedot(albumi.name, albumi.artist.name)
+    document.getElementById('results').appendChild(result)
 }
 
 // show back to top-button

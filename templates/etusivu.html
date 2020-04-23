@@ -42,16 +42,16 @@
 
 <script>
 
-// search again by a genrelink from infobox
+// search again by a genre link from infobox
     window.newSearch = newSearch;
 
-// open infobox
-   function naytaInfo(artistiNimi) {
+// open artist infobox
+   function showInfo(artistName) {
         document.getElementById("infocontent").innerHTML = "Ladataan...";
         var modal = document.getElementById("infoModal");
         var p = document.getElementsByClassName("close")[0];
         modal.style.display = "block";
-        // close by click
+        // close by clicking either icon or outside the box
         p.onclick = function() {
             modal.style.display = "none";
             document.getElementById("secondinfoheader").innerHTML ="";
@@ -64,15 +64,14 @@
                 document.getElementById("additionalinfo").innerHTML = "";
             }
         }
-        document.getElementById("infoheader").innerHTML = artistiNimi;
+        document.getElementById("infoheader").innerHTML = artistName;
         // get additional info
-        let searchArtist = encodeURIComponent(artistiNimi);
+        let searchArtist = encodeURIComponent(artistName);
         $.ajax({
             async:true,
             type: 'GET',
             url: `http://ws.audioscrobbler.com/2.0/?method=artist.getinfo&artist=${searchArtist}&api_key=b7ba2a47c41146f14422726a121f27b7&format=json`,
             success: (payload) => {
-                console.log(payload)
                 // show artist biography and similar artists
                 document.getElementById("infocontent").innerHTML = payload.artist.bio.summary;
                 document.getElementById("secondinfoheader").innerHTML ="Samankaltaisia artisteja:";
@@ -88,14 +87,14 @@
             success: (payload) => {
                 console.log(payload)
                 let searchresult = payload.toptags.tag.map(({name})=>`<span><a onclick='newSearch("${name}")'>${name}</a></span>`);
-                let ekatViisi = searchresult.filter((tagi,index)=> index<5).join(", ");
-                document.getElementById("genretags").innerHTML = ekatViisi;
+                let firstFive = searchresult.filter((tagi,index)=> index<5).join(", ");
+                document.getElementById("genretags").innerHTML = firstFive;
             }
         });
     }
 
-// album-info
-    function albumiInfo(albumiNimi, artistiNimi) {
+// open album infobox
+    function albumiInfo(albumName, artistName) {
         document.getElementById("infocontent").innerHTML = "Ladataan...";
         var modal = document.getElementById("infoModal");
         var p = document.getElementsByClassName("close")[0];
@@ -109,17 +108,17 @@
                 modal.style.display = "none";
             }
         }
-        document.getElementById("infoheader").innerHTML = `${artistiNimi}: ${albumiNimi}`;
+        document.getElementById("infoheader").innerHTML = `${artistName}: ${albumName}`;
         // get additional info
-        let searchArtist = encodeURIComponent(artistiNimi);
-        let searchAlbum = encodeURIComponent(albumiNimi);
+        let searchArtist = encodeURIComponent(artistName);
+        let searchAlbum = encodeURIComponent(albumName);
         $.ajax({
             async:true,
             type: 'GET',
             url: `http://ws.audioscrobbler.com/2.0/?method=album.getinfo&api_key=b7ba2a47c41146f14422726a121f27b7&artist=${searchArtist}&album=${searchAlbum}&format=json`,
             success: (payload) => {
                 console.log(payload)
-                // show album biography and tracks
+                // show album info and track listing
                 if (payload.album.wiki) {
                     document.getElementById("infocontent").innerHTML = payload.album.wiki.summary;
                     document.getElementById("additionalinfo").innerHTML = "<h3>Kappaleet:</h3>"+payload.album.tracks.track
@@ -139,8 +138,8 @@
             success: (payload) => {
                 console.log(payload)
                 let searchresult = payload.toptags.tag.map(({name})=>`<span><a onclick='newSearch("${name}")'>${name}</a></span>`);
-                let ekatViisi = searchresult.filter((tagi,index)=> index<5).join(", ");
-                document.getElementById("genretags").innerHTML = ekatViisi;
+                let firstFive = searchresult.filter((tagi,index)=> index<5).join(", ");
+                document.getElementById("genretags").innerHTML = firstFive;
             }
         });
     }
@@ -197,7 +196,7 @@ $("#nextpage").click(function(event){
                     if (payload.topartists.artist.length === 0) {
                         document.getElementById('loading').innerHTML = "Yhtään tulosta ei löytynyt!";
                     } else {
-                    payload.topartists.artist.forEach((artist)=> showArtist(artist, naytaInfo));
+                    payload.topartists.artist.forEach((artist)=> showArtist(artist, showInfo));
                     document.getElementById('loading').innerHTML = ""; 
                     }
                 }

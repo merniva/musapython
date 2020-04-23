@@ -33,15 +33,16 @@
 
 <script> 
 
-// tee uusi haku infoboksista klikatun artistin mukaan
+// search again by an artist link from infobox
     window.newSearch = newSearch;
 
-// info-ikkunan avaus
-    function naytaInfo(artistiNimi) {
+// open artist infobox
+    function showInfo(artistName) {
         document.getElementById("artistiInfo").innerHTML = "Ladataan...";
         var modal = document.getElementById("infoModal");
         var p = document.getElementsByClassName("close")[0];
         modal.style.display = "block";
+        // close by clicking either icon or outside the box
         p.onclick = function() {
             modal.style.display = "none";
         }
@@ -50,14 +51,15 @@
                 modal.style.display = "none";
             }
         }
-        document.getElementById("artistiOtsikko").innerHTML = artistiNimi;
-        let searchArtist = encodeURIComponent(artistiNimi);
+        document.getElementById("artistiOtsikko").innerHTML = artistName;
+        // get additional info
+        let searchArtist = encodeURIComponent(artistName);
         $.ajax({
             async:true,
             type: 'GET',
             url: `http://ws.audioscrobbler.com/2.0/?method=artist.getinfo&artist=${searchArtist}&api_key=b7ba2a47c41146f14422726a121f27b7&format=json`,
             success: (payload) => {
-                console.log(payload)
+                // show artist biography and similar artists
                 document.getElementById("artistiInfo").innerHTML = payload.artist.bio.summary;
                 document.getElementById("similar").innerHTML = payload.artist.similar.artist
                     .map(({name,url})=>`<span><a onclick='newSearch("${name}")'>${name}</a></span>`).join(", ");
@@ -69,20 +71,21 @@
             type: 'GET',
             url: artistigenreurl,
             success: (payload) => {
-                console.log(payload)
+                // show artist's five top tags
                 let searchresult = payload.toptags.tag.map(({name, url})=>`<span><a href="${url}">${name}</a></span>`);
-                let ekatViisi = searchresult.filter((tagi,index)=> index<5).join(", ");
-                document.getElementById("smallergenretags").innerHTML = ekatViisi;
+                let firstFive = searchresult.filter((tagi,index)=> index<5).join(", ");
+                document.getElementById("smallergenretags").innerHTML = firstFive;
             }
         });
     }
 
-// scrollaa takaisin ylös -nappi
+
+// scroll back to top-button
 let scrollUp = document.getElementById("upButton");
 window.onscroll = function() {scrollFunction(scrollUp)};
 
 
-// haetaan results
+// fetch the results by given artist name
     function fetchResults(event) {
         document.getElementById('searchbutton').disabled = true;
         document.getElementById('results').innerHTML = "";
@@ -106,7 +109,7 @@ window.onscroll = function() {scrollFunction(scrollUp)};
                     if (payload.error) {
                         document.getElementById('loading').innerHTML = "Yhtään tulosta ei löytynyt!";
                     } else {
-                    payload.similarartists.artist.forEach((artist)=> showArtist(artist, naytaInfo));
+                    payload.similarartists.artist.forEach((artist)=> showArtist(artist, showInfo));
                     document.getElementById('loading').innerHTML = "";
                     }
                 }
@@ -114,7 +117,7 @@ window.onscroll = function() {scrollFunction(scrollUp)};
     }
 
 
-// hae-buttonin aktivointi
+// activate search-button
     $(".search").submit(function(event) {
         fetchResults(event);
     });
