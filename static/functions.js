@@ -1,7 +1,7 @@
 
 // new search by keyword from infobox
-function newSearch(haettava) {
-    let strippedValue = haettava
+function newSearch(searchedValue) {
+    let strippedValue = searchedValue
         .replace(" & ", "&")
         .replace(" + ", "+");
     document.getElementById("close").click();
@@ -11,7 +11,7 @@ function newSearch(haettava) {
 }
 
 // show results from Artist search
-function showArtist(artisti, naytaTiedot) {
+function showArtist(artisti, showInformation) {
     let result = document.createElement("div");
     result.innerHTML = `
         <div class='resultbox'>
@@ -22,13 +22,13 @@ function showArtist(artisti, naytaTiedot) {
         <button id="seemore">Katso lisää</button>
         </div>
         `;
-    result.onclick=()=> naytaTiedot(artisti.name)
+    result.onclick=()=> showInformation(artisti.name)
     document.getElementById('results').appendChild(result)
 }
 
 
 // show results from Album search
-function showAlbum(albumi, naytaTiedot) {
+function showAlbum(albumi, showInformation) {
     let result = document.createElement("div");
     result.innerHTML = `
         <div class='resultbox'>
@@ -40,7 +40,7 @@ function showAlbum(albumi, naytaTiedot) {
         <button id="seemore">Katso lisää</button>
         </div>
         `;
-    result.onclick=()=> naytaTiedot(albumi.name, albumi.artist.name)
+    result.onclick=()=> showInformation(albumi.name, albumi.artist.name)
     document.getElementById('results').appendChild(result)
 }
 
